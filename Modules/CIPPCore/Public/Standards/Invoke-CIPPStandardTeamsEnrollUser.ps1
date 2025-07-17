@@ -25,10 +25,11 @@ function Invoke-CIPPStandardTeamsEnrollUser {
         UPDATECOMMENTBLOCK
             Run the Tools\Update-StandardsComments.ps1 script to update this comment block
     .LINK
-        https://docs.cipp.app/user-documentation/tenant/standards/list-standards/teams-standards#low-impact
+        https://docs.cipp.app/user-documentation/tenant/standards/list-standards
     #>
 
     param($Tenant, $Settings)
+    Test-CIPPStandardLicense -StandardName 'TeamsEnrollUser' -TenantFilter $Tenant -RequiredCapabilities @('MCOSTANDARD', 'MCOEV', 'MCOIMP', 'TEAMS1','Teams_Room_Standard')
 
     # Get EnrollUserOverride value using null-coalescing operator
     $enrollUserOverride = $Settings.EnrollUserOverride.value ?? $Settings.EnrollUserOverride

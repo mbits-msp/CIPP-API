@@ -27,10 +27,11 @@ function Invoke-CIPPStandardAtpPolicyForO365 {
         UPDATECOMMENTBLOCK
             Run the Tools\Update-StandardsComments.ps1 script to update this comment block
     .LINK
-        https://docs.cipp.app/user-documentation/tenant/standards/list-standards/defender-standards#low-impact
+        https://docs.cipp.app/user-documentation/tenant/standards/list-standards
     #>
 
     param($Tenant, $Settings)
+    Test-CIPPStandardLicense -StandardName 'AtpPolicyForO365' -TenantFilter $Tenant -RequiredCapabilities @('SHAREPOINTWAC', 'SHAREPOINTSTANDARD', 'SHAREPOINTENTERPRISE', 'ONEDRIVE_BASIC', 'ONEDRIVE_ENTERPRISE')
     ##$Rerun -Type Standard -Tenant $Tenant -Settings $Settings 'AtpPolicyForO365'
     try {
         $CurrentState = New-ExoRequest -tenantid $Tenant -cmdlet 'Get-AtpPolicyForO365' |
@@ -41,8 +42,8 @@ function Invoke-CIPPStandardAtpPolicyForO365 {
         }
     }
     $StateIsCorrect = ($CurrentState.EnableATPForSPOTeamsODB -eq $true) -and
-                      ($CurrentState.EnableSafeDocs -eq $true) -and
-                      ($CurrentState.AllowSafeDocsOpen -eq $Settings.AllowSafeDocsOpen)
+    ($CurrentState.EnableSafeDocs -eq $true) -and
+    ($CurrentState.AllowSafeDocsOpen -eq $Settings.AllowSafeDocsOpen)
 
     if ($Settings.remediate -eq $true) {
         if ($StateIsCorrect -eq $true) {
